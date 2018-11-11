@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanetSimulation", "PlanetSimulation\PlanetSimulation\PlanetSimulation.csproj", "{849704A9-D5D2-44A6-9052-B58BB684BBFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanetSimulationContent", "PlanetSimulation\PlanetSimulationContent\PlanetSimulationContent.contentproj", "{F5D969F6-E447-49CA-BCBC-BB30E065E4A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSLibrary", "..\XSLibrary\XSLibrary\XSLibrary.csproj", "{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Debug|x86.ActiveCfg = Debug|x86
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Debug|x86.Build.0 = Debug|x86
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Release|Any CPU.ActiveCfg = Release|x86
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Release|x86.ActiveCfg = Release|x86
+		{849704A9-D5D2-44A6-9052-B58BB684BBFE}.Release|x86.Build.0 = Release|x86
+		{F5D969F6-E447-49CA-BCBC-BB30E065E4A7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F5D969F6-E447-49CA-BCBC-BB30E065E4A7}.Debug|x86.ActiveCfg = Debug|x86
+		{F5D969F6-E447-49CA-BCBC-BB30E065E4A7}.Release|Any CPU.ActiveCfg = Release|x86
+		{F5D969F6-E447-49CA-BCBC-BB30E065E4A7}.Release|x86.ActiveCfg = Release|x86
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Debug|x86.Build.0 = Debug|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Release|x86.ActiveCfg = Release|Any CPU
+		{3F4FE9F4-EBE9-4A3D-9609-77C6A1E4621E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {438DD14C-FA73-4821-890D-E55A34A5FE87}
+	EndGlobalSection
+EndGlobal
