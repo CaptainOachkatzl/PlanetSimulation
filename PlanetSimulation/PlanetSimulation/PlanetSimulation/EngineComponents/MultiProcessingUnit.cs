@@ -12,7 +12,7 @@ namespace PlanetSimulation.EngineComponents
         private GravityHandling GravityHandler { get; set; }
         private CollisionHandling CollisionHandler { get; set; }
 
-        private UniquePairThreading<Planet, GameTime> m_pairThreading;
+        private UniquePairDistribution<Planet, GameTime> m_pairThreading;
 
         public int CoreCount { get; private set; }
 
@@ -33,7 +33,8 @@ namespace PlanetSimulation.EngineComponents
         public MultiProcessingUnit(PlanetSim parent)
         {
             CoreCount = GetCoreCount();
-            m_pairThreading = new UniquePairThreading<Planet, GameTime>(CoreCount, false);
+            CorePool<Planet, GameTime> corePool = new SystemHandledThreadPool<Planet, GameTime>(CoreCount);
+            m_pairThreading = new SynchronizedRRTDistribution<Planet, GameTime>(corePool);
 
             GravityHandler = parent.GravityHandler;
             CollisionHandler = parent.CollisionHandler;
@@ -45,8 +46,11 @@ namespace PlanetSimulation.EngineComponents
 
         public void CalculatePlanetMovement(List<Planet> allPlanets, GameTime currentGameTime)
         {
-            m_pairThreading.Calculate(allPlanets.ToArray(), currentGameTime, GravityHandler.CalculateGravity);
-            m_pairThreading.Calculate(allPlanets.ToArray(), currentGameTime, CollisionHandler.CalculateCollision);
+            m_pairThreading.SetCalculationFunction(GravityHandler.CalculateGravity);
+            m_pairThreading.Calculate(allPlanets.ToArray(), currentGameTime);
+
+            m_pairThreading.SetCalculationFunction(CollisionHandler.CalculateCollision);
+            m_pairThreading.Calculate(allPlanets.ToArray(), currentGameTime);
         }
 
         private int GetCoreCount()
