@@ -1,3 +1,6 @@
 [submodule "XSLibrary"]
 	path = XSLibrary
 	url = https://github.com/CaptainOachkatzl/XSLibrary
+[submodule "XNASupport"]
+	path = XNASupport
+	url = https://github.com/CaptainOachkatzl/XNASupport
