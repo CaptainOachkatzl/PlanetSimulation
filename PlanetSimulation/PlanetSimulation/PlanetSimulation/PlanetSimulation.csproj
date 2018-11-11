@@ -150,7 +150,7 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\InputFunctionality\InputFunctionality\InputFunctionality.csproj">
+    <ProjectReference Include="..\..\..\XNASupport\InputFunctionality\InputFunctionality\InputFunctionality.csproj">
       <Project>{015062df-869a-4d9c-aaa4-2139addba7ed}</Project>
       <Name>InputFunctionality</Name>
     </ProjectReference>
