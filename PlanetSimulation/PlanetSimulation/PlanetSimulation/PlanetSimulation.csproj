@@ -73,8 +73,9 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="InputFunctionality">
-      <HintPath>..\..\..\..\Users\Dave\Documents\Visual Studio 2015\Projects\InputFunctionality\InputFunctionality\bin\x86\Release\InputFunctionality.dll</HintPath>
+    <Reference Include="Cloo, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Sourceforge.Cloo.0.9.1\lib\net35\Cloo.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
@@ -106,9 +107,6 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
-    <Reference Include="RenderingFunctionality">
-      <HintPath>..\..\..\..\Users\Dave\Documents\Visual Studio 2015\Projects\RenderingFunctionality\RenderingFunctionality\bin\x86\Release\RenderingFunctionality.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -127,6 +125,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineComponents\GraphicCardDistributionPool.cs" />
+    <Compile Include="EngineComponents\DataTransformationArray.cs" />
     <Compile Include="EngineComponents\MultiProcessingUnit.cs" />
     <Compile Include="Interface\CameraControl.cs" />
     <Compile Include="CameraComponents\UniverseCamera.cs" />
@@ -150,6 +150,18 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\InputFunctionality\InputFunctionality\InputFunctionality.csproj">
+      <Project>{015062df-869a-4d9c-aaa4-2139addba7ed}</Project>
+      <Name>InputFunctionality</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\XNASupport\InputFunctionality\InputFunctionality\InputFunctionality.csproj">
+      <Project>{015062df-869a-4d9c-aaa4-2139addba7ed}</Project>
+      <Name>InputFunctionality</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\XNASupport\RenderingFunctionality\RenderingFunctionality\RenderingFunctionality.csproj">
+      <Project>{d1bdaf08-cfff-47f7-8114-2e7105eb1493}</Project>
+      <Name>RenderingFunctionality</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\XSLibrary\XSLibrary\XSMultithreadingPatterns\XSMultithreadingPatterns.csproj">
       <Project>{983f5871-11ee-4879-b80e-4529816f0f38}</Project>
       <Name>XSMultithreadingPatterns</Name>
@@ -195,6 +207,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="PlanetSimulation_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

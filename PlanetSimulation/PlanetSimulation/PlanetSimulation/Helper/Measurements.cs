@@ -8,6 +8,5 @@ namespace PlanetSimulation
         {
             return planet2.Position - planet1.Position;
         }
-
     }
 }

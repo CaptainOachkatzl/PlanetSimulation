@@ -19,7 +19,7 @@ namespace PlanetSimulation.Interface
 
         public void Update()
         {
-            ToggleMultiThreading();
+            DistributionSelection();
             UniverseSaveLoad();
             UniverseManipulation();
         }
@@ -71,10 +71,19 @@ namespace PlanetSimulation.Interface
                 CurrentUniverse.CreateRandomField();
         }
 
-        private void ToggleMultiThreading()
+        private void DistributionSelection()
         {
-            if (InputKeyboard.KeyNowPressed(Keys.M))
-                Parent.MultiThreading = !Parent.MultiThreading;
+            if (InputKeyboard.KeyNowPressed(Keys.Y))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.Sequence;
+            else if (InputKeyboard.KeyNowPressed(Keys.X))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.ParallelLoop;
+            else if (InputKeyboard.KeyNowPressed(Keys.C))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.Modulo;
+            else if (InputKeyboard.KeyNowPressed(Keys.V))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.LockedRRT;
+            else if (InputKeyboard.KeyNowPressed(Keys.B))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.SyncedRRT;
         }
+
     }
 }

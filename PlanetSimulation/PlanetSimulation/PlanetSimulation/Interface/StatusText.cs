@@ -17,7 +17,8 @@ namespace PlanetSimulation.Interface
         string PlanetCount { get; set; }
         string PhysCoreCount { get; set; }
         string LogCoreCount { get; set; }
-        string UsedThreads { get; set; }
+        string UsedCores { get; set; }
+        string Distribution { get; set; }
 
         int FPS { get; set; }
         int FrameCounter { get; set; }
@@ -48,8 +49,11 @@ namespace PlanetSimulation.Interface
 
         public void DrawStatusText()
         {
-            if(DrawStatus || DrawControls)
-                Parent.SpriteBatch.DrawString(Parent.DataFont, CreateStatusText(), new Vector2(GameGlobals.PlanetDataListInspacer, GameGlobals.PlanetDataListInspacer), Color.White);
+            if (DrawStatus || DrawControls)
+            {
+                string test = CreateStatusText();
+                Parent.SpriteBatch.DrawString(Parent.DataFont, test, new Vector2(GameGlobals.PlanetDataListInspacer, GameGlobals.PlanetDataListInspacer), Color.White);
+            }
         }
 
         private string CreateStatusText()
@@ -71,7 +75,8 @@ namespace PlanetSimulation.Interface
                 Zoom + "\n" +
                 PhysCoreCount + "\n" +
                 LogCoreCount + "\n" +
-                UsedThreads;
+                UsedCores + "\n" +
+                Distribution;
         }
 
         private void UpdateDataString()
@@ -88,7 +93,8 @@ namespace PlanetSimulation.Interface
             PlanetCount = "Planet count: " + CurrentUniverse.Planets.Count;
             PhysCoreCount = "Physical cores: " + CurrentUniverse.GetPhysicalCoreCount().ToString();
             LogCoreCount = "Logical cores: " + CurrentUniverse.GetLogicalCoreCount().ToString();
-            UsedThreads = "Used threads: " + CurrentUniverse.UsedProcessorCoreCount().ToString();
+            UsedCores = "Used cores: " + CurrentUniverse.UsedProcessorCoreCount().ToString();
+            Distribution = "Distribution: " + Parent.GetDistributionName(); 
         }
 
         private void CalculateFPS(float elapsedTime)

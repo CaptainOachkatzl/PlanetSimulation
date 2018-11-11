@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 
 namespace PlanetSimulation.PhysicHandler
 {
@@ -21,9 +20,10 @@ namespace PlanetSimulation.PhysicHandler
             float acceleration = GravityConstantKilometerTonns * GameGlobals.SimulationSpeedMuliplicator / distanceSqared * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             distanceVector.Normalize();
+            distanceVector *= acceleration;
 
-            planet1.Direction += distanceVector * planet2.Mass * acceleration;
-            planet2.Direction -= distanceVector * planet1.Mass * acceleration;
+            planet1.Direction += distanceVector * planet2.Mass;
+            planet2.Direction -= distanceVector * planet1.Mass;
         }
     }
 }

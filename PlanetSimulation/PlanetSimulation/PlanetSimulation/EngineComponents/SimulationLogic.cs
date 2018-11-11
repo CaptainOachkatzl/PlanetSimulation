@@ -56,8 +56,6 @@ namespace PlanetSimulation
             }
         }
 
-        public bool MultiThreading { get; set; }
-
         public SpriteBatch SpriteBatch { get; private set; }
         public SpriteFont DataFont { get; private set; }
 
@@ -66,11 +64,6 @@ namespace PlanetSimulation
 
         public PlanetSim(int maxUsedCores = 0, int screenWidth = -1, int screenHeight = -1, bool freeFPS = false) : base()
         {
-            Content.RootDirectory = "Content";
-            Pause = true;
-            MultiThreading = true;
-            GameGlobals.MaximumProcessorsUsed = maxUsedCores;
-
             graphics = new GraphicsDeviceManager(this);
             InputKeyboard = new KeyboardAdvanced();
             InputMouse = new MouseAdvanced();
@@ -78,6 +71,10 @@ namespace PlanetSimulation
             GravityHandler = new GravityHandling();
             CollisionHandler = new CollisionHandling();
             MultiProcessing = new MultiProcessingUnit(this);
+
+            Content.RootDirectory = "Content";
+            Pause = true;
+            GameGlobals.MaximumProcessorsUsed = maxUsedCores;
 
             m_universes = new Universe[GameGlobals.MaxUniverseCount];
 
@@ -168,6 +165,25 @@ namespace PlanetSimulation
             base.UnloadContent();
         }
 
+        public string GetDistributionName()
+        {
+            switch (MultiProcessing.Distribution)
+            {
+                case MultiProcessingUnit.DistributionMode.Sequence:
+                    return "Sequence";
+                case MultiProcessingUnit.DistributionMode.ParallelLoop:
+                    return "Parallel Loop";
+                case MultiProcessingUnit.DistributionMode.Modulo:
+                    return "Modulo Split";
+                case MultiProcessingUnit.DistributionMode.LockedRRT:
+                    return "Locked RRT";
+                case MultiProcessingUnit.DistributionMode.SyncedRRT:
+                    return "Synchronized RRT";
+                default:
+                    return "Missing distribution name";
+            }
+        }
+
         protected override void Update(GameTime gameTime)
         {
             CurrentGameTime = gameTime;
@@ -178,7 +194,7 @@ namespace PlanetSimulation
             if (InputKeyboard.KeyNowPressed(Keys.I))
                 StatusText.DrawStatus = !StatusText.DrawStatus;
 
-            if (InputKeyboard.KeyNowPressed(Keys.C))
+            if (InputKeyboard.KeyNowPressed(Keys.H))
                 StatusText.DrawControls = !StatusText.DrawControls;
 
             StatusText.Update();

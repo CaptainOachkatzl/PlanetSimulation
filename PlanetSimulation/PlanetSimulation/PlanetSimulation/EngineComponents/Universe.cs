@@ -31,6 +31,8 @@ namespace PlanetSimulation
             CollisionHandler = parent.CollisionHandler;
             MultiProcessing = parent.MultiProcessing;
             ID = id;
+
+            Reset();
         }
 
 
@@ -58,33 +60,11 @@ namespace PlanetSimulation
 
         public void UpdateUniverse()
         {
-            if (Parent.MultiThreading && MultiProcessing.CoreCount > 1)
-            {
-                MultiProcessing.CalculatePlanetMovement(Planets, CurrentGameTime);
-            }
-            else
-            {
-                CalculatePlanetMovementSingleThread();
-            }
+            MultiProcessing.CalculatePlanetMovement(Planets, CurrentGameTime);
 
             foreach (Planet planet in Planets)
             {
                 planet.ApplyAcceleration();
-            }
-        }
-
-        private void CalculatePlanetMovementSingleThread()
-        {
-            for (int i = 0; i < Planets.Count - 1; i++)
-            {
-                for (int j = i + 1; j < Planets.Count; j++)
-                    GravityHandler.CalculateGravity(Planets[i], Planets[j], CurrentGameTime);
-            }
-
-            for (int i = 0; i < Planets.Count - 1; i++)
-            {
-                for (int j = i + 1; j < Planets.Count; j++)
-                    CollisionHandler.CalculateCollision(Planets[i], Planets[j]);
             }
         }
 
@@ -133,7 +113,7 @@ namespace PlanetSimulation
 
         public int UsedProcessorCoreCount()
         {
-            return Parent.MultiThreading ? MultiProcessing.CoreCount : 1;
+            return Parent.MultiProcessing.UsedCores;
         }
 
         public void AddPlanet(Planet planet)
@@ -241,6 +221,7 @@ namespace PlanetSimulation
         {
             ClearPlanets();
             Camera.ResetCamera();
+            Camera.Zoom = 0.3F;
         }
 
         public void CreateRandomField()
