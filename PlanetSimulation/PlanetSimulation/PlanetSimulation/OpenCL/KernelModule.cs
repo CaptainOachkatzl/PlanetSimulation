@@ -25,7 +25,15 @@ namespace PlanetSimulation.OpenCL
             Queue = new ComputeCommandQueue(m_context, m_graphicsCard, ComputeCommandQueueFlags.None);
 
             ComputeProgram program = new ComputeProgram(m_context, GetKernelSource(kernelPath));
-            program.Build(null, null, null, IntPtr.Zero);
+            try
+            {
+                program.Build(null, null, null, IntPtr.Zero);
+            }
+            catch
+            {
+                string error = program.GetBuildLog(m_graphicsCard);
+                throw new Exception(error);
+            }
 
             Program = program.CreateKernel(function);
         }
