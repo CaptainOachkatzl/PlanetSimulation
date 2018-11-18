@@ -6,10 +6,11 @@ namespace PlanetSimulation.OpenCL
     class GraphicCardDistribution : UniquePairDistribution<Planet, GameTime>
     {
         RRTPairing RRTMatrix { get; set; }
+        KernelModule Kernel { get; set; } = new KernelModule();
 
         public GraphicCardDistribution()
         {
-            GraphicCardDistributionPool pool = new GraphicCardDistributionPool();
+            Kernel.Load("OpenCL/GraphicCardKernelRRT", "Calculate");
 
             RRTMatrix = new RRTPairing();
             RRTMatrix.GenerateMatrix(CoreCount);

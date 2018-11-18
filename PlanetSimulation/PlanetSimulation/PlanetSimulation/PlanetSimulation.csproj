@@ -134,6 +134,7 @@
     <Compile Include="FileAdapter.cs" />
     <Compile Include="Interface\ManipulationMenu.cs" />
     <Compile Include="Interface\StatusText.cs" />
+    <Compile Include="OpenCL\KernelModule.cs" />
     <Compile Include="PhysicHandler\CollisionHandling.cs" />
     <Compile Include="Helper\GameConstants.cs" />
     <Compile Include="Helper\Generics.cs" />
