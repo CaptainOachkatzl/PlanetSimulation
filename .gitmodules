@@ -4,3 +4,6 @@
 [submodule "XNASupport"]
 	path = XNASupport
 	url = https://github.com/CaptainOachkatzl/XNASupport
+[submodule "XSGravitonCL"]
+	path = XSGravitonCL
+	url = https://github.com/CaptainOachkatzl/XSGravitonCL
