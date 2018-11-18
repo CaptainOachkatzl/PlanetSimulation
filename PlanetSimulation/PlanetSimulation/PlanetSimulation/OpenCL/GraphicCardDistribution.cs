@@ -10,12 +10,14 @@ namespace PlanetSimulation.OpenCL
         RRTPairing RRTMatrix { get; set; }
         KernelModule Kernel { get; set; } = new KernelModule();
 
+        float[] m_planetData;
+
         ComputeBuffer<int> m_matrixBuffer;
-        ComputeBuffer<float> m_position;
-        ComputeBuffer<float> m_direction;
-        ComputeBuffer<float> m_mass;
+        ComputeBuffer<float> m_planetDataBuffer;
 
         public override int CoreCount => 2;
+
+        bool fired = false;
 
         public GraphicCardDistribution()
         {
@@ -34,6 +36,11 @@ namespace PlanetSimulation.OpenCL
 
         public override void Calculate(Planet[] elements, GameTime globalData)
         {
+            if (fired)
+                return;
+
+            fired = true;
+
             // move RRT matrix to graphics card (probably only once cause core count stays equal)
             WriteRRTMatrix();
 
@@ -52,16 +59,29 @@ namespace PlanetSimulation.OpenCL
 
         private void WritePlanetData(Planet[] elements, float elapsedSeconds)
         {
-            m_position = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, new float[2]);
-            m_direction = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, new float[2]);
-            m_mass = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, new float[1]);
+            m_planetData = CreatePlanetArray(elements);
+            m_planetDataBuffer = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, m_planetData);
 
-            Kernel.Program.SetMemoryArgument(3, m_position);
-            Kernel.Program.SetMemoryArgument(4, m_direction);
-            Kernel.Program.SetMemoryArgument(5, m_mass);
-            Kernel.Program.SetValueArgument(6, 1 /*elements.GetLength(0)*/);
-            Kernel.Program.SetValueArgument(7, elapsedSeconds);
-            Kernel.Program.SetValueArgument(8, GameGlobals.SimulationSpeedMuliplicator);
+            Kernel.Program.SetMemoryArgument(3, m_planetDataBuffer);
+            Kernel.Program.SetValueArgument(4, elements.GetLength(0));
+            Kernel.Program.SetValueArgument(5, elapsedSeconds);
+            Kernel.Program.SetValueArgument(6, GameGlobals.SimulationSpeedMuliplicator);
+        }
+
+        private float[] CreatePlanetArray(Planet[] elements)
+        {
+            float[] planetData = new float[elements.GetLength(0) * 5];
+
+            for (int i = 0; i < elements.GetLength(0); i++)
+            {
+                planetData[i * 5] = elements[i].Position.X;
+                planetData[i * 5 + 1] = elements[i].Position.Y;
+                planetData[i * 5 + 2] = elements[i].Direction.X;
+                planetData[i * 5 + 3] = elements[i].Direction.Y;
+                planetData[i * 5 + 4] = elements[i].Mass;
+            }
+
+            return planetData;
         }
 
         private void WriteRRTMatrix()
@@ -79,11 +99,12 @@ namespace PlanetSimulation.OpenCL
         private void Synchronize()
         {
             Kernel.Queue.Finish();
+            
         }
 
         private void ReadPlanetData()
         {
-
+            Kernel.Queue.ReadFromBuffer(m_planetDataBuffer, ref m_planetData, true, null);
         }
 
         public override void Dispose()
