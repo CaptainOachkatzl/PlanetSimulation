@@ -72,12 +72,10 @@ namespace PlanetSimulation
             set
             {
                 m_radius = value;
-                m_volume = 4F / 3F * (float)Math.PI * (float)Math.Pow(value, 3);
+                Volume = 4F / 3F * (float)Math.PI * (float)Math.Pow(value, 3);
             }
         }
-
-        private float m_volume;
-        public float Volume { get { return m_volume; } }
+        public float Volume { get; private set; }
 
         public float BouncingFactor { get; set; }
         public Texture2D SpritePlanet { get; private set; }
