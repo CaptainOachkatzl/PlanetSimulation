@@ -209,6 +209,21 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\XSGravitonCL\gravitonkernel.cl">
+      <Link>XSGravitonCL\gravitonkernel.cl</Link>
+    </None>
+    <None Include="..\..\..\XSGravitonCL\Heap.cl">
+      <Link>XSGravitonCL\Heap.cl</Link>
+    </None>
+    <None Include="..\..\..\XSGravitonCL\Planet.cl">
+      <Link>XSGravitonCL\Planet.cl</Link>
+    </None>
+    <None Include="..\..\..\XSGravitonCL\RTTMatrix.cl">
+      <Link>XSGravitonCL\RTTMatrix.cl</Link>
+    </None>
+    <None Include="..\..\..\XSGravitonCL\Stack.cl">
+      <Link>XSGravitonCL\Stack.cl</Link>
+    </None>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
