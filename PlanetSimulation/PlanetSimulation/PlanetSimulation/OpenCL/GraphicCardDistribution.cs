@@ -10,7 +10,7 @@ namespace PlanetSimulation.OpenCL
 
         public GraphicCardDistribution()
         {
-            Kernel.Load("OpenCL/GraphicCardKernelRRT", "Calculate");
+            Kernel.Load("OpenCL/GraphicCardKernelRRT.cl", "Calculate");
 
             RRTMatrix = new RRTPairing();
             RRTMatrix.GenerateMatrix(CoreCount);
