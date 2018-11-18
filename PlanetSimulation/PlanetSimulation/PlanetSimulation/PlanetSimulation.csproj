@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{849704A9-D5D2-44A6-9052-B58BB684BBFE}</ProjectGuid>
@@ -125,8 +125,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EngineComponents\GraphicCardDistributionPool.cs" />
-    <Compile Include="EngineComponents\DataTransformationArray.cs" />
+    <Compile Include="OpenCL\GraphicCardDistribution.cs" />
+    <Compile Include="OpenCL\GraphicCardDistributionPool.cs" />
+    <Compile Include="OpenCL\DataTransformationArray.cs" />
     <Compile Include="EngineComponents\MultiProcessingUnit.cs" />
     <Compile Include="Interface\CameraControl.cs" />
     <Compile Include="CameraComponents\UniverseCamera.cs" />

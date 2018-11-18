@@ -1,4 +1,4 @@
-﻿namespace PlanetSimulation.EngineComponents
+﻿namespace PlanetSimulation.OpenCL
 {
     abstract class DataTransformationArray
     {
