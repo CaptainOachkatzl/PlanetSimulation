@@ -207,6 +207,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenCL\kernel.cl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="PlanetSimulation_TemporaryKey.pfx" />
   </ItemGroup>
