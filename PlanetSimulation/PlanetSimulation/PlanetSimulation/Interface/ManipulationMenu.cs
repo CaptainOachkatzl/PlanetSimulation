@@ -83,6 +83,8 @@ namespace PlanetSimulation.Interface
                 Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.LockedRRT;
             else if (InputKeyboard.KeyNowPressed(Keys.B))
                 Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.SyncedRRT;
+            else if (InputKeyboard.KeyNowPressed(Keys.N))
+                Parent.MultiProcessing.Distribution = EngineComponents.MultiProcessingUnit.DistributionMode.OpenCL;
         }
 
     }
