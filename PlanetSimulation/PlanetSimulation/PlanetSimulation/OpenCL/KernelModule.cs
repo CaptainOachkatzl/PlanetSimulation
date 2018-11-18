@@ -8,26 +8,26 @@ namespace PlanetSimulation.OpenCL
     {
         public ComputeKernel Program { get; private set; }
         public ComputeCommandQueue Queue { get; private set; }
+        public ComputeContext Context { get; private set; }
 
         ComputePlatform m_platform;
-        ComputeContext m_context;
         ComputeDevice m_graphicsCard;
 
-        public void Load(string kernelPath, string function)
+        public void Load(string directory, string kernelFileName, string function)
         {
             m_platform = ComputePlatform.Platforms[0];
 
-            m_context = new ComputeContext(ComputeDeviceTypes.Gpu,
+            Context = new ComputeContext(ComputeDeviceTypes.Gpu,
             new ComputeContextPropertyList(m_platform), null, IntPtr.Zero);
 
-            m_graphicsCard = m_context.Devices[0];
+            m_graphicsCard = Context.Devices[0];
 
-            Queue = new ComputeCommandQueue(m_context, m_graphicsCard, ComputeCommandQueueFlags.None);
+            Queue = new ComputeCommandQueue(Context, m_graphicsCard, ComputeCommandQueueFlags.None);
 
-            ComputeProgram program = new ComputeProgram(m_context, GetKernelSource(kernelPath));
+            ComputeProgram program = new ComputeProgram(Context, GetKernelSource(directory + "/" + kernelFileName));
             try
             {
-                program.Build(null, null, null, IntPtr.Zero);
+                program.Build(null, "-I " + directory, null, IntPtr.Zero);
             }
             catch
             {
