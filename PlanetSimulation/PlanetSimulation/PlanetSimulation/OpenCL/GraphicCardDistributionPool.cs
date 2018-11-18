@@ -54,7 +54,7 @@ namespace PlanetSimulation.OpenCL
         private string GetKernelSource()
         {
             // load opencl source
-            StreamReader streamReader = new StreamReader("kernel.cl");
+            StreamReader streamReader = new StreamReader("OpenCL/kernel.cl");
             string clSource = streamReader.ReadToEnd();
             streamReader.Close();
             return clSource;

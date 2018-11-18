@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Management;
 using XSLibrary.MultithreadingPatterns.UniquePair;
+using PlanetSimulation.OpenCL;
 
 namespace PlanetSimulation.EngineComponents
 {
@@ -15,7 +16,8 @@ namespace PlanetSimulation.EngineComponents
             ParallelLoop,
             Modulo,
             LockedRRT,
-            SyncedRRT
+            SyncedRRT,
+            OpenCL
         }
 
         DistributionMode m_distributionMode;
@@ -31,6 +33,7 @@ namespace PlanetSimulation.EngineComponents
 
         private GravityHandling GravityHandler { get; set; }
         private CollisionHandling CollisionHandler { get; set; }
+        private GraphicCardDistribution m_graphicCardDistribution = new GraphicCardDistribution();
 
         private UniquePairDistribution<Planet, GameTime> m_pairDistribution;
 
@@ -123,6 +126,9 @@ namespace PlanetSimulation.EngineComponents
                     break;
                 case DistributionMode.SyncedRRT:
                     m_pairDistribution = new SynchronizedRRTDistribution<Planet, GameTime>(new SystemHandledThreadPool<Planet, GameTime>(CoreCount));
+                    break;
+                case DistributionMode.OpenCL:
+                    m_pairDistribution = m_graphicCardDistribution;
                     break;
             }
         }
