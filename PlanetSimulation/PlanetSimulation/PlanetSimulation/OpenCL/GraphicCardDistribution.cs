@@ -15,9 +15,7 @@ namespace PlanetSimulation.OpenCL
         ComputeBuffer<int> m_matrixBuffer;
         ComputeBuffer<float> m_planetDataBuffer;
 
-        public override int CoreCount => 2;
-
-        bool fired = false;
+        public override int CoreCount => 8;
 
         public GraphicCardDistribution()
         {
@@ -25,7 +23,7 @@ namespace PlanetSimulation.OpenCL
             Kernel.Load(kernelDirectory, "gravitonkernel.cl", "Calculate");
 
             RRTMatrix = new RRTPairing();
-            RRTMatrix.GenerateMatrix(CoreCount);
+            RRTMatrix.GenerateMatrix(CoreCount * 2);
             m_matrixBuffer = new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, RRTMatrix.ToArray());
         }
 
@@ -36,10 +34,8 @@ namespace PlanetSimulation.OpenCL
 
         public override void Calculate(Planet[] elements, GameTime globalData)
         {
-            if (fired || elements.GetLength(0) <= 0)
+            if (elements.GetLength(0) <= 0)
                 return;
-
-            fired = true;
 
             // move RRT matrix to graphics card (probably only once cause core count stays equal)
             WriteRRTMatrix();
@@ -54,11 +50,14 @@ namespace PlanetSimulation.OpenCL
             Synchronize();
 
             // read planet data from graphics card
-            ReadPlanetData();
+            ReadPlanetData(elements);
         }
 
         private void WritePlanetData(Planet[] elements, float elapsedSeconds)
         {
+            if (m_planetDataBuffer != null)
+                m_planetDataBuffer.Dispose();
+
             m_planetData = CreatePlanetArray(elements);
             m_planetDataBuffer = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, m_planetData);
 
@@ -99,7 +98,6 @@ namespace PlanetSimulation.OpenCL
                 offset[i] = i;
 
             Kernel.Queue.Execute(Kernel.Program, offset, new long[1] { CoreCount }, new long[1] { CoreCount }, null);
-            //Kernel.Queue.ExecuteTask(Kernel.Program, null);
         }
 
         private void Synchronize()
@@ -108,9 +106,15 @@ namespace PlanetSimulation.OpenCL
             
         }
 
-        private void ReadPlanetData()
+        private void ReadPlanetData(Planet[] elements)
         {
             Kernel.Queue.ReadFromBuffer(m_planetDataBuffer, ref m_planetData, true, null);
+
+            for (int i = 0; i < elements.Length; i++)
+            {
+                Vector2 dir = new Vector2(m_planetData[i * PLANET_DATA_SIZE + 2], m_planetData[i * PLANET_DATA_SIZE + 3]);
+                elements[i].Direction = dir;
+            }
         }
 
         public override void Dispose()
