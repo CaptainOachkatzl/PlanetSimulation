@@ -36,7 +36,7 @@ namespace PlanetSimulation.OpenCL
 
         public override void Calculate(Planet[] elements, GameTime globalData)
         {
-            if (fired)
+            if (fired || elements.GetLength(0) <= 0)
                 return;
 
             fired = true;
@@ -68,17 +68,18 @@ namespace PlanetSimulation.OpenCL
             Kernel.Program.SetValueArgument(6, GameGlobals.SimulationSpeedMuliplicator);
         }
 
+        const int PLANET_DATA_SIZE = 6;
         private float[] CreatePlanetArray(Planet[] elements)
         {
-            float[] planetData = new float[elements.GetLength(0) * 5];
+            float[] planetData = new float[elements.GetLength(0) * PLANET_DATA_SIZE];
 
             for (int i = 0; i < elements.GetLength(0); i++)
             {
-                planetData[i * 5] = elements[i].Position.X;
-                planetData[i * 5 + 1] = elements[i].Position.Y;
-                planetData[i * 5 + 2] = elements[i].Direction.X;
-                planetData[i * 5 + 3] = elements[i].Direction.Y;
-                planetData[i * 5 + 4] = elements[i].Mass;
+                planetData[i * PLANET_DATA_SIZE] = elements[i].Position.X;
+                planetData[i * PLANET_DATA_SIZE + 1] = elements[i].Position.Y;
+                planetData[i * PLANET_DATA_SIZE + 2] = elements[i].Direction.X;
+                planetData[i * PLANET_DATA_SIZE + 3] = elements[i].Direction.Y;
+                planetData[i * PLANET_DATA_SIZE + 4] = elements[i].Mass;
             }
 
             return planetData;
