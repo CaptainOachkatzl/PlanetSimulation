@@ -229,6 +229,10 @@
       <Link>XSGravitonCL\Stack.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\..\XSGravitonCL\Calculation.cl">
+      <Link>XSGravitonCL\Calculation.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
