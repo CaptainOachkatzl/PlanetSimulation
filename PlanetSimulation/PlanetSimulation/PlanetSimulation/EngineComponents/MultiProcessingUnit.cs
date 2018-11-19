@@ -36,6 +36,7 @@ namespace PlanetSimulation.EngineComponents
         private GraphicCardDistribution m_graphicCardDistribution = new GraphicCardDistribution();
 
         private UniquePairDistribution<Planet, GameTime> m_pairDistribution;
+        private UniquePairDistribution<Planet, GameTime> m_collisionDistribution;
 
         public int CoreCount { get; private set; }
         public int UsedCores
@@ -66,6 +67,9 @@ namespace PlanetSimulation.EngineComponents
 
             Distribution = DistributionMode.OpenCL;
 
+            m_collisionDistribution = new SynchronizedRRTDistribution<Planet, GameTime>(new SystemHandledThreadPool<Planet, GameTime>(CoreCount));
+            m_collisionDistribution.SetCalculationFunction(CollisionHandler.CalculateCollision);
+
             ChangeDistribution();
         }
 
@@ -81,8 +85,7 @@ namespace PlanetSimulation.EngineComponents
             m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
 
             // collisions
-            m_pairDistribution.SetCalculationFunction(CollisionHandler.CalculateCollision);
-            m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+            m_collisionDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
         }
 
         private int GetCoreCount()
