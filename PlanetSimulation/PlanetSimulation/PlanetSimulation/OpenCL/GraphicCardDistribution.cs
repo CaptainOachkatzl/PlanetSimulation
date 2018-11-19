@@ -94,7 +94,12 @@ namespace PlanetSimulation.OpenCL
 
         private void CalculateOnGraphicsCard()
         {
-            Kernel.Queue.ExecuteTask(Kernel.Program, null);
+            long[] offset = new long[CoreCount];
+            for (int i = 0; i < offset.Length; i++)
+                offset[i] = i;
+
+            Kernel.Queue.Execute(Kernel.Program, offset, new long[1] { CoreCount }, new long[1] { CoreCount }, null);
+            //Kernel.Queue.ExecuteTask(Kernel.Program, null);
         }
 
         private void Synchronize()
