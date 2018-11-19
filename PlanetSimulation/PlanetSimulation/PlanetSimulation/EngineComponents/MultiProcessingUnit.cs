@@ -64,7 +64,7 @@ namespace PlanetSimulation.EngineComponents
 
             CoreCount = GetCoreCount();
 
-            Distribution = DistributionMode.SyncedRRT;
+            Distribution = DistributionMode.OpenCL;
 
             ChangeDistribution();
         }
