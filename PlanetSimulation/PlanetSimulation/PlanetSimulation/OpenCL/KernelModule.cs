@@ -15,6 +15,10 @@ namespace PlanetSimulation.OpenCL
 
         public void Load(string directory, string kernelFileName, string function)
         {
+#if DEBUG
+            DeleteCache();
+#endif
+
             m_platform = ComputePlatform.Platforms[0];
 
             Context = new ComputeContext(ComputeDeviceTypes.Gpu,
@@ -45,6 +49,21 @@ namespace PlanetSimulation.OpenCL
             string clSource = streamReader.ReadToEnd();
             streamReader.Close();
             return clSource;
+        }
+
+        private void DeleteCache()
+        {
+            string cachePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/NVIDIA/ComputeCache";
+
+            DirectoryInfo di = new DirectoryInfo(cachePath);
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
         }
     }
 }
