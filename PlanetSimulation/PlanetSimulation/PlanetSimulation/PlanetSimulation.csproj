@@ -209,26 +209,26 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\XSGravitonCL\gravitonkernel.cl">
+    <Content Include="..\..\..\XSGravitonCL\gravitonkernel.cl">
       <Link>XSGravitonCL\gravitonkernel.cl</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\XSGravitonCL\Heap.cl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Heap.cl">
       <Link>XSGravitonCL\Heap.cl</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\XSGravitonCL\Planet.cl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Planet.cl">
       <Link>XSGravitonCL\Planet.cl</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\XSGravitonCL\RTTMatrix.cl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\RTTMatrix.cl">
       <Link>XSGravitonCL\RTTMatrix.cl</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\..\XSGravitonCL\Stack.cl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Stack.cl">
       <Link>XSGravitonCL\Stack.cl</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
