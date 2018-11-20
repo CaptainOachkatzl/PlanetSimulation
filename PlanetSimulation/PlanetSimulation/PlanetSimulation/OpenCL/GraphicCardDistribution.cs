@@ -92,6 +92,7 @@ namespace PlanetSimulation.OpenCL
                 planetData[i * PLANET_DATA_SIZE + 2] = elements[i].Direction.X;
                 planetData[i * PLANET_DATA_SIZE + 3] = elements[i].Direction.Y;
                 planetData[i * PLANET_DATA_SIZE + 4] = elements[i].Mass;
+                planetData[i * PLANET_DATA_SIZE + 5] = elements[i].Radius;
             }
 
             return planetData;
