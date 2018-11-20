@@ -133,8 +133,10 @@ namespace PlanetSimulation.OpenCL
 
             for (int i = 0; i < elements.Length; i++)
             {
-                Vector2 pos = new Vector2(m_planetData[i * PLANET_DATA_SIZE], m_planetData[i * PLANET_DATA_SIZE + 1]);
-                elements[i].Position = pos;
+                Vector2 data = new Vector2(m_planetData[i * PLANET_DATA_SIZE], m_planetData[i * PLANET_DATA_SIZE + 1]);
+                elements[i].Position = data;
+                data = new Vector2(m_planetData[i * PLANET_DATA_SIZE + 2], m_planetData[i * PLANET_DATA_SIZE + 3]);
+                elements[i].Direction = data;
             }
         }
 
