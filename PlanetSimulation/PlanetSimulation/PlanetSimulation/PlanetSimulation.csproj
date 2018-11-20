@@ -237,6 +237,10 @@
       <Link>XSGravitonCL\GlobalData.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\..\XSGravitonCL\Distribution.cl">
+      <Link>XSGravitonCL\Distribution.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
