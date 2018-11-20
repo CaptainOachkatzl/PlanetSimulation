@@ -213,7 +213,7 @@ namespace PlanetSimulation
             fileString += WriteUniverseParameterString(universe);
 
             int planetIndex = 0;
-            foreach(Planet planet in universe.Planets)
+            foreach(Planet planet in universe.Planets.ToArray())
             {
                 fileString += WritePlanetString(planet, planetIndex, universe.IsPlanetSelected(planet), universe.Camera.FocusPlanet == planet);
                 planetIndex++;

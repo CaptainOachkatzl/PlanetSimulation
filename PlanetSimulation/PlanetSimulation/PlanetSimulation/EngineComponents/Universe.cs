@@ -13,7 +13,7 @@ namespace PlanetSimulation
     {
         public PlanetSim Parent { get { return Game as PlanetSim; } }
         public GameTime CurrentGameTime { get { return Parent.CurrentGameTime; } }
-        public List<Planet> Planets { get; set; }
+        public PlanetCollection Planets { get;set;}
         public int ID { get; private set; }
         public List<Planet> SelectedPlanets { get; private set; }
         public UniverseCamera Camera { get; private set; }
@@ -24,7 +24,7 @@ namespace PlanetSimulation
 
         public Universe (PlanetSim parent, int id) : base(parent)
         {
-            Planets = new List<Planet>();
+            Planets = new PlanetCollection();
             SelectedPlanets = new List<Planet>();
             Camera = new UniverseCamera(Parent.GraphicsDevice.Viewport);
             GravityHandler = parent.GravityHandler;
@@ -42,7 +42,7 @@ namespace PlanetSimulation
             copy.Camera.Position2D = this.Camera.Position2D;
             copy.Camera.Zoom = this.Camera.Zoom;
 
-            foreach (Planet planet in Planets)
+            foreach (Planet planet in Planets.ToArray())
             {
                 Planet planetCopy = planet.Copy(copy);
 
@@ -73,7 +73,7 @@ namespace PlanetSimulation
             null,
             Camera.GetTranslationMatrix());
 
-            foreach (Planet planet in Planets)
+            foreach (Planet planet in Planets.ToArray())
             {
                 planet.Draw(gameTime, Parent.SpriteBatch, false /*planet == Camera.FocusPlanet*/);
             }
@@ -147,7 +147,7 @@ namespace PlanetSimulation
 
         public bool IsPlanetCollidingWithAnyOtherPlanet(Planet planet)
         {
-            foreach (Planet otherPlanet in Planets)
+            foreach (Planet otherPlanet in Planets.ToArray())
             {
                 if (planet == otherPlanet)
                     continue;
@@ -193,7 +193,7 @@ namespace PlanetSimulation
 
         public Planet GetPlanetAtPosition(Vector2 position)
         {
-            foreach (Planet planet in Planets)
+            foreach (Planet planet in Planets.ToArray())
             {
                 if (planet.IsPointInPlanet(position))
                     return planet;

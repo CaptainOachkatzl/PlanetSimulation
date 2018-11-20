@@ -1,4 +1,4 @@
-using XSLibrary.MultithreadingPatterns.UniquePair;
+﻿using XSLibrary.MultithreadingPatterns.UniquePair;
 using Microsoft.Xna.Framework;
 using System;
 using Cloo;
@@ -17,7 +17,6 @@ namespace PlanetSimulation.OpenCL
 
         int m_previouslyUsedCores = -1;
         public override int CoreCount => 64;
-        bool savedState = false;
 
         public GraphicCardDistribution()
         {
@@ -25,8 +24,6 @@ namespace PlanetSimulation.OpenCL
             Kernel.Load(kernelDirectory, "gravitonkernel.cl", "Calculate");
 
             RRTMatrix = new RRTPairing();
-
-            Kernel.Program.SetMemoryArgument(7, new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, new int[1] { 0 }));
         }
 
         public override void SetCalculationFunction(PairCalculationFunction function)
@@ -39,6 +36,9 @@ namespace PlanetSimulation.OpenCL
             if (elements.Length <= 0)
                 return;
 
+            Kernel.Program.SetValueArgument(5, (float)globalData.ElapsedGameTime.TotalSeconds);
+            Kernel.Program.SetValueArgument(6, GameGlobals.SimulationSpeedMuliplicator);
+
             int usableCores = CalculateUsableCoreCount(elements.Length);
             // move RRT matrix to graphics card (probably only once cause core count stays equal)
             if (usableCores != m_previouslyUsedCores)
@@ -47,10 +47,10 @@ namespace PlanetSimulation.OpenCL
                 WriteRRTMatrix(usableCores);
             }
 
-            if (!savedState)
+            if (DataChanged)
             {
                 // move planet data to graphics card
-                WritePlanetData(elements, (float)globalData.ElapsedGameTime.TotalSeconds);
+                WritePlanetData(elements);
             }
 
             // graphics card does the calculation
@@ -68,7 +68,7 @@ namespace PlanetSimulation.OpenCL
             return Math.Min(CoreCount, elementCount / 2);
         }
 
-        private void WritePlanetData(Planet[] elements, float elapsedSeconds)
+        private void WritePlanetData(Planet[] elements)
         {
             if (m_planetDataBuffer != null)
                 m_planetDataBuffer.Dispose();
@@ -78,8 +78,6 @@ namespace PlanetSimulation.OpenCL
 
             Kernel.Program.SetMemoryArgument(3, m_planetDataBuffer);
             Kernel.Program.SetValueArgument(4, elements.GetLength(0));
-            Kernel.Program.SetValueArgument(5, elapsedSeconds);
-            Kernel.Program.SetValueArgument(6, GameGlobals.SimulationSpeedMuliplicator);
         }
 
         const int PLANET_DATA_SIZE = 6;

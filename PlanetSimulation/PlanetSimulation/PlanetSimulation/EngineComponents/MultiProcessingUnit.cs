@@ -1,6 +1,5 @@
 ﻿using System;
 using PlanetSimulation.PhysicHandler;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Management;
 using XSLibrary.MultithreadingPatterns.UniquePair;
@@ -36,7 +35,6 @@ namespace PlanetSimulation.EngineComponents
         private GraphicCardDistribution m_graphicCardDistribution = new GraphicCardDistribution();
 
         private UniquePairDistribution<Planet, GameTime> m_pairDistribution;
-        private UniquePairDistribution<Planet, GameTime> m_collisionDistribution;
 
         public int CoreCount { get; private set; }
         public int UsedCores
@@ -73,27 +71,32 @@ namespace PlanetSimulation.EngineComponents
             m_pairDistribution.Dispose();
         }
 
-        public void CalculatePlanetMovement(List<Planet> allPlanets, GameTime currentGameTime)
+        public void CalculatePlanetMovement(PlanetCollection allPlanets, GameTime currentGameTime)
         {
+            m_pairDistribution.DataChanged = allPlanets.Changed;
+            allPlanets.ClearChangedFlag();
+
+            Planet[] planets = allPlanets.ToArray();
+
             if (IsStandaloneDistribution())
             {
-                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+                m_pairDistribution.Calculate(planets, currentGameTime);
             }
             else
             {
                 // gravity
                 m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
-                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+                m_pairDistribution.Calculate(planets, currentGameTime);
 
                 // collisions
                 m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
-                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+                m_pairDistribution.Calculate(planets, currentGameTime);
 
-                ApplyAccelaration(allPlanets);
+                ApplyAccelaration(planets);
             }
         }
 
-        private void ApplyAccelaration(List<Planet> allPlanets)
+        private void ApplyAccelaration(Planet[] allPlanets)
         {
             foreach (Planet planet in allPlanets)
             {
