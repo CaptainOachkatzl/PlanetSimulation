@@ -139,7 +139,11 @@ namespace PlanetSimulation.OpenCL
         {
             base.Dispose();
 
-            m_matrixBuffer.Dispose();
+            if(m_matrixBuffer != null)
+                m_matrixBuffer.Dispose();
+
+            if (m_planetDataBuffer != null)
+                m_planetDataBuffer.Dispose();
         }
     }
 }
