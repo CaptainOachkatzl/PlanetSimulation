@@ -30,6 +30,8 @@ namespace PlanetSimulation.EngineComponents
             }
         }
 
+        bool DistributionChanged { get; set; } = true;
+
         private GravityHandling GravityHandler { get; set; }
         private CollisionHandling CollisionHandler { get; set; }
         private GraphicCardDistribution m_graphicCardDistribution = new GraphicCardDistribution();
@@ -73,7 +75,8 @@ namespace PlanetSimulation.EngineComponents
 
         public void CalculatePlanetMovement(PlanetCollection allPlanets, GameTime currentGameTime)
         {
-            m_pairDistribution.DataChanged = allPlanets.Changed;
+            m_pairDistribution.DataChanged = allPlanets.Changed || DistributionChanged;
+            DistributionChanged = false;
             allPlanets.ClearChangedFlag();
 
             Planet[] planets = allPlanets.ToArray();
@@ -155,6 +158,8 @@ namespace PlanetSimulation.EngineComponents
                     m_pairDistribution = m_graphicCardDistribution;
                     break;
             }
+
+            DistributionChanged = true;
         }
     }
 }
