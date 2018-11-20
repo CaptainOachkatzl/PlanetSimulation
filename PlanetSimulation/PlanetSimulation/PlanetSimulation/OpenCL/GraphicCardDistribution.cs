@@ -25,6 +25,8 @@ namespace PlanetSimulation.OpenCL
             Kernel.Load(kernelDirectory, "gravitonkernel.cl", "Calculate");
 
             RRTMatrix = new RRTPairing();
+
+            Kernel.Program.SetMemoryArgument(7, new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, new int[1] { 0 }));
         }
 
         public override void SetCalculationFunction(PairCalculationFunction function)
@@ -131,8 +133,8 @@ namespace PlanetSimulation.OpenCL
 
             for (int i = 0; i < elements.Length; i++)
             {
-                Vector2 dir = new Vector2(m_planetData[i * PLANET_DATA_SIZE + 2], m_planetData[i * PLANET_DATA_SIZE + 3]);
-                elements[i].Direction = dir;
+                Vector2 pos = new Vector2(m_planetData[i * PLANET_DATA_SIZE], m_planetData[i * PLANET_DATA_SIZE + 1]);
+                elements[i].Position = pos;
             }
         }
 
