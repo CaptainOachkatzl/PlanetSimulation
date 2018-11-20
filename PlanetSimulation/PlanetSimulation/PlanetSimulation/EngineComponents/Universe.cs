@@ -61,11 +61,6 @@ namespace PlanetSimulation
         public void UpdateUniverse()
         {
             MultiProcessing.CalculatePlanetMovement(Planets, CurrentGameTime);
-
-            foreach (Planet planet in Planets)
-            {
-                planet.ApplyAcceleration();
-            }
         }
 
         public override void Draw(GameTime gameTime)

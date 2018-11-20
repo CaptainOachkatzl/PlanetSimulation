@@ -66,11 +66,6 @@ namespace PlanetSimulation.EngineComponents
             CoreCount = GetCoreCount();
 
             Distribution = DistributionMode.OpenCL;
-
-            m_collisionDistribution = new SynchronizedRRTDistribution<Planet, GameTime>(new SystemHandledThreadPool<Planet, GameTime>(CoreCount));
-            m_collisionDistribution.SetCalculationFunction(CollisionHandler.CalculateCollision);
-
-            ChangeDistribution();
         }
 
         public void Close()
@@ -80,12 +75,30 @@ namespace PlanetSimulation.EngineComponents
 
         public void CalculatePlanetMovement(List<Planet> allPlanets, GameTime currentGameTime)
         {
-            // gravity
-            m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
-            m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+            if (IsStandaloneDistribution())
+            {
+                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+            }
+            else
+            {
+                // gravity
+                m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
+                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
 
-            // collisions
-            m_collisionDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+                // collisions
+                m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
+                m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+
+                ApplyAccelaration(allPlanets);
+            }
+        }
+
+        private void ApplyAccelaration(List<Planet> allPlanets)
+        {
+            foreach (Planet planet in allPlanets)
+            {
+                planet.ApplyAcceleration();
+            }
         }
 
         private int GetCoreCount()
@@ -109,6 +122,11 @@ namespace PlanetSimulation.EngineComponents
                 coreCount += int.Parse(item["NumberOfCores"].ToString());
             }
             return coreCount;
+        }
+
+        private bool IsStandaloneDistribution()
+        {
+            return Distribution == DistributionMode.OpenCL;
         }
 
         private void ChangeDistribution()
