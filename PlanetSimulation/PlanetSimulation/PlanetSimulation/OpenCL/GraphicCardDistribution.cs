@@ -15,10 +15,9 @@ namespace PlanetSimulation.OpenCL
         ComputeBuffer<int> m_matrixBuffer;
         ComputeBuffer<float> m_planetDataBuffer;
 
-        bool savedState = false;
         int m_previouslyUsedCores = -1;
-
         public override int CoreCount => 8;
+        bool savedState = false;
 
         public GraphicCardDistribution()
         {
