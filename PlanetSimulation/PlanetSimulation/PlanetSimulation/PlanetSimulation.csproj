@@ -125,6 +125,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineComponents\PlanetCollection.cs" />
     <Compile Include="OpenCL\GraphicCardDistribution.cs" />
     <Compile Include="OpenCL\GraphicCardDistributionPool.cs" />
     <Compile Include="OpenCL\DataTransformationArray.cs" />
