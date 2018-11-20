@@ -241,6 +241,10 @@
       <Link>XSGravitonCL\Gravity.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\..\XSGravitonCL\Collision.cl">
+      <Link>XSGravitonCL\Collision.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
