@@ -15,6 +15,9 @@ namespace PlanetSimulation.OpenCL
         ComputeBuffer<int> m_matrixBuffer;
         ComputeBuffer<float> m_planetDataBuffer;
 
+        bool savedState = false;
+        int m_previouslyUsedCores = -1;
+
         public override int CoreCount => 8;
 
         public GraphicCardDistribution()
@@ -23,8 +26,6 @@ namespace PlanetSimulation.OpenCL
             Kernel.Load(kernelDirectory, "gravitonkernel.cl", "Calculate");
 
             RRTMatrix = new RRTPairing();
-            RRTMatrix.GenerateMatrix(CoreCount * 2);
-            m_matrixBuffer = new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, RRTMatrix.ToArray());
         }
 
         public override void SetCalculationFunction(PairCalculationFunction function)
@@ -34,14 +35,22 @@ namespace PlanetSimulation.OpenCL
 
         public override void Calculate(Planet[] elements, GameTime globalData)
         {
-            if (elements.GetLength(0) <= 0)
+            if (elements.Length <= 0)
                 return;
 
+            int usableCores = CalculateUsableCoreCount(elements.Length);
             // move RRT matrix to graphics card (probably only once cause core count stays equal)
-            WriteRRTMatrix();
+            if (usableCores != m_previouslyUsedCores)
+            {
+                m_previouslyUsedCores = usableCores;
+                WriteRRTMatrix(usableCores);
+            }
 
-            // move planet data to graphics card
-            WritePlanetData(elements, (float)globalData.ElapsedGameTime.TotalSeconds);
+            if (!savedState)
+            {
+                // move planet data to graphics card
+                WritePlanetData(elements, (float)globalData.ElapsedGameTime.TotalSeconds);
+            }
 
             // graphics card does the calculation
             CalculateOnGraphicsCard();
@@ -51,6 +60,11 @@ namespace PlanetSimulation.OpenCL
 
             // read planet data from graphics card
             ReadPlanetData(elements);
+        }
+
+        private int CalculateUsableCoreCount(int elementCount)
+        {
+            return Math.Min(CoreCount, elementCount / 2);
         }
 
         private void WritePlanetData(Planet[] elements, float elapsedSeconds)
@@ -84,11 +98,17 @@ namespace PlanetSimulation.OpenCL
             return planetData;
         }
 
-        private void WriteRRTMatrix()
+        private void WriteRRTMatrix(int usedCores)
         {
+            if (m_matrixBuffer != null)
+                m_matrixBuffer.Dispose();
+
+            RRTMatrix.GenerateMatrix(usedCores * 2);
+            m_matrixBuffer = new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, RRTMatrix.ToArray());
+
             Kernel.Program.SetMemoryArgument(0, m_matrixBuffer);
             Kernel.Program.SetValueArgument(1, RRTMatrix.StepCount);
-            Kernel.Program.SetValueArgument(2, CoreCount);
+            Kernel.Program.SetValueArgument(2, usedCores);
         }
 
         private void CalculateOnGraphicsCard()
@@ -103,7 +123,6 @@ namespace PlanetSimulation.OpenCL
         private void Synchronize()
         {
             Kernel.Queue.Finish();
-            
         }
 
         private void ReadPlanetData(Planet[] elements)
