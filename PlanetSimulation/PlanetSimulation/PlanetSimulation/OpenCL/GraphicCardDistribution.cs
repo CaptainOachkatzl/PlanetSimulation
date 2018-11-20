@@ -1,4 +1,4 @@
-﻿using XSLibrary.MultithreadingPatterns.UniquePair;
+using XSLibrary.MultithreadingPatterns.UniquePair;
 using Microsoft.Xna.Framework;
 using System;
 using Cloo;
@@ -16,7 +16,7 @@ namespace PlanetSimulation.OpenCL
         ComputeBuffer<float> m_planetDataBuffer;
 
         int m_previouslyUsedCores = -1;
-        public override int CoreCount => 8;
+        public override int CoreCount => 64;
         bool savedState = false;
 
         public GraphicCardDistribution()
