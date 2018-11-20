@@ -225,10 +225,6 @@
       <Link>XSGravitonCL\Stack.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\..\XSGravitonCL\Calculation.cl">
-      <Link>XSGravitonCL\Calculation.cl</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\..\XSGravitonCL\RRTMatrix.cl">
       <Link>XSGravitonCL\RRTMatrix.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -239,6 +235,10 @@
     </Content>
     <Content Include="..\..\..\XSGravitonCL\Distribution.cl">
       <Link>XSGravitonCL\Distribution.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Gravity.cl">
+      <Link>XSGravitonCL\Gravity.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="OpenCL\GraphicCardKernelRRT.cl">
