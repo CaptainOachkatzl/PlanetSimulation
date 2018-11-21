@@ -127,8 +127,6 @@
   <ItemGroup>
     <Compile Include="EngineComponents\PlanetCollection.cs" />
     <Compile Include="OpenCL\GraphicCardDistribution.cs" />
-    <Compile Include="OpenCL\GraphicCardDistributionPool.cs" />
-    <Compile Include="OpenCL\DataTransformationArray.cs" />
     <Compile Include="EngineComponents\MultiProcessingUnit.cs" />
     <Compile Include="Interface\CameraControl.cs" />
     <Compile Include="CameraComponents\UniverseCamera.cs" />
@@ -246,12 +244,6 @@
       <Link>XSGravitonCL\Collision.cl</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="OpenCL\GraphicCardKernelRRT.cl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenCL\kernel.cl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="PlanetSimulation_TemporaryKey.pfx" />
   </ItemGroup>
