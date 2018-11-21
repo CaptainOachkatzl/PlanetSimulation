@@ -1,4 +1,4 @@
-﻿using XSLibrary.MultithreadingPatterns.UniquePair;
+using XSLibrary.MultithreadingPatterns.UniquePair;
 using Microsoft.Xna.Framework;
 using System;
 using Cloo;
@@ -11,6 +11,7 @@ namespace PlanetSimulation.OpenCL
         KernelModule Kernel { get; set; } = new KernelModule();
 
         float[] m_planetData;
+        int[] m_matrixData;
 
         ComputeBuffer<int> m_matrixBuffer;
         ComputeBuffer<float> m_planetDataBuffer;
@@ -36,8 +37,8 @@ namespace PlanetSimulation.OpenCL
             if (elements.Length <= 0)
                 return;
 
-            Kernel.Program.SetValueArgument(5, (float)globalData.ElapsedGameTime.TotalSeconds);
-            Kernel.Program.SetValueArgument(6, GameGlobals.SimulationSpeedMuliplicator);
+            Kernel.Program.SetValueArgument(7, (float)globalData.ElapsedGameTime.TotalSeconds);
+            Kernel.Program.SetValueArgument(8, GameGlobals.SimulationSpeedMuliplicator);
 
             int usableCores = CalculateUsableCoreCount(elements.Length);
             // move RRT matrix to graphics card (probably only once cause core count stays equal)
@@ -76,8 +77,9 @@ namespace PlanetSimulation.OpenCL
             m_planetData = CreatePlanetArray(elements);
             m_planetDataBuffer = new ComputeBuffer<float>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, m_planetData);
 
-            Kernel.Program.SetMemoryArgument(3, m_planetDataBuffer);
-            Kernel.Program.SetValueArgument(4, elements.GetLength(0));
+            Kernel.Program.SetMemoryArgument(1, m_planetDataBuffer);
+            Kernel.Program.SetLocalArgument(5, m_planetData.Length * 4);
+            Kernel.Program.SetValueArgument(6, elements.Length);
         }
 
         const int PLANET_DATA_SIZE = 6;
@@ -104,11 +106,13 @@ namespace PlanetSimulation.OpenCL
                 m_matrixBuffer.Dispose();
 
             RRTMatrix.GenerateMatrix(usedCores * 2);
-            m_matrixBuffer = new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, RRTMatrix.ToArray());
+            m_matrixData = RRTMatrix.ToArray();
+            m_matrixBuffer = new ComputeBuffer<int>(Kernel.Context, ComputeMemoryFlags.UseHostPointer, m_matrixData);
 
             Kernel.Program.SetMemoryArgument(0, m_matrixBuffer);
-            Kernel.Program.SetValueArgument(1, RRTMatrix.StepCount);
-            Kernel.Program.SetValueArgument(2, usedCores);
+            Kernel.Program.SetLocalArgument(2, m_matrixData.Length * 4); // int = 4 bytes
+            Kernel.Program.SetValueArgument(3, RRTMatrix.StepCount);
+            Kernel.Program.SetValueArgument(4, usedCores);
         }
 
         private void CalculateOnGraphicsCard()
