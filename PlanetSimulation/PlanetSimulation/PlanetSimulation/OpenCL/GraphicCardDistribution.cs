@@ -55,7 +55,7 @@ namespace PlanetSimulation.OpenCL
             }
 
             // graphics card does the calculation
-            CalculateOnGraphicsCard();
+            CalculateOnGraphicsCard(usableCores);
 
             // some sort of synchronization probably
             Synchronize();
@@ -115,13 +115,13 @@ namespace PlanetSimulation.OpenCL
             Kernel.Program.SetValueArgument(4, usedCores);
         }
 
-        private void CalculateOnGraphicsCard()
+        private void CalculateOnGraphicsCard(int usedCores)
         {
-            long[] offset = new long[CoreCount];
+            long[] offset = new long[usedCores];
             for (int i = 0; i < offset.Length; i++)
                 offset[i] = i;
 
-            Kernel.Queue.Execute(Kernel.Program, offset, new long[1] { CoreCount }, new long[1] { CoreCount }, null);
+            Kernel.Queue.Execute(Kernel.Program, offset, new long[1] { usedCores }, new long[1] { usedCores }, null);
         }
 
         private void Synchronize()
