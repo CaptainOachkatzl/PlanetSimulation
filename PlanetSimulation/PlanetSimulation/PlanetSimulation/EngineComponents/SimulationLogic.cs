@@ -179,6 +179,8 @@ namespace PlanetSimulation
                     return "Locked RRT";
                 case MultiProcessingUnit.DistributionMode.SyncedRRT:
                     return "Synchronized RRT";
+                case MultiProcessingUnit.DistributionMode.OpenCL:
+                    return "XSGravitonCL";
                 default:
                     return "Missing distribution name";
             }

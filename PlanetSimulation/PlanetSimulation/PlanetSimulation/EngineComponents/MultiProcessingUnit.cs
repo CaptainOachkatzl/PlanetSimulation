@@ -1,9 +1,9 @@
 ﻿using System;
 using PlanetSimulation.PhysicHandler;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Management;
 using XSLibrary.MultithreadingPatterns.UniquePair;
+using PlanetSimulation.OpenCL;
 
 namespace PlanetSimulation.EngineComponents
 {
@@ -15,7 +15,8 @@ namespace PlanetSimulation.EngineComponents
             ParallelLoop,
             Modulo,
             LockedRRT,
-            SyncedRRT
+            SyncedRRT,
+            OpenCL
         }
 
         DistributionMode m_distributionMode;
@@ -29,8 +30,11 @@ namespace PlanetSimulation.EngineComponents
             }
         }
 
+        bool DistributionChanged { get; set; } = true;
+
         private GravityHandling GravityHandler { get; set; }
         private CollisionHandling CollisionHandler { get; set; }
+        private GraphicCardDistribution m_graphicCardDistribution = new GraphicCardDistribution();
 
         private UniquePairDistribution<Planet, GameTime> m_pairDistribution;
 
@@ -61,9 +65,7 @@ namespace PlanetSimulation.EngineComponents
 
             CoreCount = GetCoreCount();
 
-            Distribution = DistributionMode.SyncedRRT;
-
-            ChangeDistribution();
+            Distribution = DistributionMode.OpenCL;
         }
 
         public void Close()
@@ -71,15 +73,38 @@ namespace PlanetSimulation.EngineComponents
             m_pairDistribution.Dispose();
         }
 
-        public void CalculatePlanetMovement(List<Planet> allPlanets, GameTime currentGameTime)
+        public void CalculatePlanetMovement(PlanetCollection allPlanets, GameTime currentGameTime)
         {
-            // gravity
-            m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
-            m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+            m_pairDistribution.DataChanged = allPlanets.Changed || DistributionChanged;
+            DistributionChanged = false;
+            allPlanets.ClearChangedFlag();
 
-            // collisions
-            m_pairDistribution.SetCalculationFunction(CollisionHandler.CalculateCollision);
-            m_pairDistribution.Calculate(allPlanets.ToArray(), currentGameTime);
+            Planet[] planets = allPlanets.ToArray();
+
+            if (IsStandaloneDistribution())
+            {
+                m_pairDistribution.Calculate(planets, currentGameTime);
+            }
+            else
+            {
+                // gravity
+                m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
+                m_pairDistribution.Calculate(planets, currentGameTime);
+
+                // collisions
+                m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
+                m_pairDistribution.Calculate(planets, currentGameTime);
+
+                ApplyAccelaration(planets);
+            }
+        }
+
+        private void ApplyAccelaration(Planet[] allPlanets)
+        {
+            foreach (Planet planet in allPlanets)
+            {
+                planet.ApplyAcceleration();
+            }
         }
 
         private int GetCoreCount()
@@ -105,6 +130,11 @@ namespace PlanetSimulation.EngineComponents
             return coreCount;
         }
 
+        private bool IsStandaloneDistribution()
+        {
+            return Distribution == DistributionMode.OpenCL;
+        }
+
         private void ChangeDistribution()
         {
             switch (Distribution)
@@ -124,7 +154,12 @@ namespace PlanetSimulation.EngineComponents
                 case DistributionMode.SyncedRRT:
                     m_pairDistribution = new SynchronizedRRTDistribution<Planet, GameTime>(new SystemHandledThreadPool<Planet, GameTime>(CoreCount));
                     break;
+                case DistributionMode.OpenCL:
+                    m_pairDistribution = m_graphicCardDistribution;
+                    break;
             }
+
+            DistributionChanged = true;
         }
     }
 }

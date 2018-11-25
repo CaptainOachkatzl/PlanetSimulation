@@ -125,14 +125,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EngineComponents\GraphicCardDistributionPool.cs" />
-    <Compile Include="EngineComponents\DataTransformationArray.cs" />
+    <Compile Include="EngineComponents\PlanetCollection.cs" />
+    <Compile Include="OpenCL\GraphicCardDistribution.cs" />
     <Compile Include="EngineComponents\MultiProcessingUnit.cs" />
     <Compile Include="Interface\CameraControl.cs" />
     <Compile Include="CameraComponents\UniverseCamera.cs" />
     <Compile Include="FileAdapter.cs" />
     <Compile Include="Interface\ManipulationMenu.cs" />
     <Compile Include="Interface\StatusText.cs" />
+    <Compile Include="OpenCL\KernelModule.cs" />
     <Compile Include="PhysicHandler\CollisionHandling.cs" />
     <Compile Include="Helper\GameConstants.cs" />
     <Compile Include="Helper\Generics.cs" />
@@ -207,6 +208,42 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\..\XSGravitonCL\gravitonkernel.cl">
+      <Link>XSGravitonCL\gravitonkernel.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Heap.cl">
+      <Link>XSGravitonCL\Heap.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Planet.cl">
+      <Link>XSGravitonCL\Planet.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Stack.cl">
+      <Link>XSGravitonCL\Stack.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\RRTMatrix.cl">
+      <Link>XSGravitonCL\RRTMatrix.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\GlobalData.cl">
+      <Link>XSGravitonCL\GlobalData.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Distribution.cl">
+      <Link>XSGravitonCL\Distribution.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Gravity.cl">
+      <Link>XSGravitonCL\Gravity.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\XSGravitonCL\Collision.cl">
+      <Link>XSGravitonCL\Collision.cl</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="PlanetSimulation_TemporaryKey.pfx" />
   </ItemGroup>
