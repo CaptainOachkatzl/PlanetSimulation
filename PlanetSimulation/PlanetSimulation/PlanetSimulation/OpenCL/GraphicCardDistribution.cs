@@ -34,7 +34,7 @@ namespace PlanetSimulation.OpenCL
 
         public override void Calculate(Planet[] elements, GameTime globalData)
         {
-            if (elements.Length <= 0)
+            if (elements.Length < 2)
                 return;
 
             Kernel.Program.SetValueArgument(7, (float)globalData.ElapsedGameTime.TotalSeconds);
