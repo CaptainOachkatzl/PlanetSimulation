@@ -92,7 +92,7 @@ namespace PlanetSimulation.EngineComponents
                 m_pairDistribution.Calculate(planets, currentGameTime);
 
                 // collisions
-                m_pairDistribution.SetCalculationFunction(GravityHandler.CalculateGravity);
+                m_pairDistribution.SetCalculationFunction(CollisionHandler.CalculateCollision);
                 m_pairDistribution.Calculate(planets, currentGameTime);
 
                 ApplyAccelaration(planets);
