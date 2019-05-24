@@ -33,6 +33,7 @@ namespace PlanetSimulation.Interface
             FPS = 0;
 
             DrawStatus = true;
+            DrawControls = true;
         }
 
         public void Update()
@@ -125,9 +126,9 @@ namespace PlanetSimulation.Interface
                 "Move camera.. WASD\n" +
                 "Zoom.. Mousewheel\n" +
                 "Focus planet.. Middle mouse button\n\n" +
-                "Toggle multithreading.. M\n\n" + 
+                "Switch algorithm.. Y, X, C, V, B, N\n\n" + 
                 "Toggle status text.. I\n" +
-                "Toggle controls text.. C";
+                "Toggle controls text.. H";
         }
     }
 }
